@@ -1,0 +1,67 @@
+@use '../../styles/mixins/flexbox';
+@use '../../styles/constants/colors';
+
+.searchWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 700px;
+
+  .searchBar {
+    min-width: inherit;
+    height: 64px;
+    background-color: #ffffff;
+    border-radius: 30px;
+
+    > div,
+    form {
+      display: inline-block;
+    }
+
+    > div {
+      width: 2em;
+      height: 2em;
+      margin: 1.5vh;
+      margin-left: 20px;
+      line-height: 2;
+      vertical-align: middle;
+      background-color: #ffffff;
+      border-radius: 35px;
+    }
+
+    form {
+      input {
+        display: flex;
+        padding-top: 20px;
+        padding-right: 24px;
+        padding-bottom: 20px;
+        padding-left: 24px;
+        font-weight: 400;
+
+        ::placeholder {
+          color: colors.$PLACEHOLDER_TEXT;
+        }
+      }
+    }
+
+    button {
+      float: right;
+      padding: 18px 32px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      line-height: 1.6;
+      color: #ffffff;
+      letter-spacing: -0.018em;
+      cursor: pointer;
+      background-color: #007be9;
+      border-width: 0;
+      border-radius: 0 42px 42px 0;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .searchWrapper > .searchBar > form > input {
+    font-size: 1em;
+  }
+}
