@@ -28,3 +28,13 @@
     }
   }
 }
+@media (max-width: 480px) {
+  .app {
+    .mainWrapper {
+      h1 {
+        font-size: 1.25rem;
+        line-height: 1.6;
+      }
+    }
+  }
+}
