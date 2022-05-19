@@ -16,9 +16,11 @@ const SearchBar = () => {
 
   // const debouncedValue = useDebounce(searchText); // lodash 로 수정 / 주석처리 일단 했습니다.
 
+  const [controller, setController] = useState<AbortController>();
+
   const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', searchText],
-    () => getSearchResult(searchText),
+    () => getSearchResult(searchText, controller),
     {
       enabled: !!searchText,
       refetchOnWindowFocus: false,
@@ -29,6 +31,10 @@ const SearchBar = () => {
   );
 
   const onInputChange = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (controller) {
+      controller.abort();
+    }
+    setController(new AbortController());
     setSearchText(value);
   };
 
