@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import Routes from './routes';
 import './styles/index.scss';
 
@@ -16,9 +16,11 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
-      <BrowserRouter>
-        <Routes />
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </RecoilRoot>
     </QueryClientProvider>
   </React.StrictMode>
 );

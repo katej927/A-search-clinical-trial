@@ -1,34 +1,28 @@
 import { useState, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
-import { useDebounce } from 'hooks';
 import { useQuery } from 'react-query';
-import { getDiseaseName } from 'services/search';
-
-import SearchRecommendation from 'components/searchRecommendation';
 import { BsSearch } from 'react-icons/bs';
+import { useRecoilState } from 'recoil';
+import _ from 'lodash';
 
+import { getDiseaseName } from 'services/search';
+import { searchWordState } from 'states/disease';
+import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
 
 const SearchBar = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchWord, setSearchWord] = useRecoilState(searchWordState);
   const [nameIdx, setNameIdx] = useState(-1);
-
   const ref = useRef<HTMLUListElement | null>(null);
 
-  const debouncedValue = useDebounce(searchText); // lodash 로 수정
+  const { isLoading, data: searchResult } = useQuery(['getDiseaseName', searchWord], () => getDiseaseName(searchWord), {
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
 
-  const { isLoading, data: searchResult } = useQuery(
-    ['getDiseaseName', debouncedValue],
-    () => getDiseaseName({ searchText: debouncedValue }),
-    {
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-    }
-  );
-
-  const onInputChange = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(value);
-  };
+  const debouncedValue = _.debounce((e: ChangeEvent<HTMLInputElement>) => {
+    setSearchWord(e.target.value);
+  }, 500);
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,7 +41,7 @@ const SearchBar = () => {
         setNameIdx((prevNum) => prevNum - 1);
         break;
       case 'Escape':
-        setSearchText('');
+        setSearchWord('');
         setNameIdx(-1);
         break;
     }
@@ -61,15 +55,14 @@ const SearchBar = () => {
           className={styles.searchInput}
           type='text'
           placeholder='질환명을 입력해 주세요.'
-          value={searchText}
-          onChange={onInputChange}
+          onChange={debouncedValue}
           onKeyDown={handleKeyDown}
         />
         <button className={styles.btn} type='submit'>
           검색
         </button>
       </form>
-      {searchText && (
+      {searchWord && (
         <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
       )}
     </div>
