@@ -1,11 +1,12 @@
 import { useState, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { BsSearch } from 'react-icons/bs';
-import { useRecoilState } from 'recoil';
 import _ from 'lodash';
 
-import { getDiseaseName } from 'services/search';
+import { getSearchResult } from 'services/search';
 import { searchWordState } from 'states/disease';
+import { useRecoilState } from 'recoil';
+
 import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
 
@@ -14,11 +15,17 @@ const SearchBar = () => {
   const [nameIdx, setNameIdx] = useState(-1);
   const ref = useRef<HTMLUListElement | null>(null);
 
-  const { isLoading, data: searchResult } = useQuery(['getDiseaseName', searchWord], () => getDiseaseName(searchWord), {
-    keepPreviousData: true,
-    refetchOnWindowFocus: false,
-    staleTime: Infinity,
-  });
+  const { isLoading, data: searchResult } = useQuery(
+    ['getDiseaseName', searchWord],
+    () => getSearchResult(searchWord),
+    {
+      enabled: !!searchWord,
+      refetchOnWindowFocus: false,
+      staleTime: 6 * 10 * 1000,
+      cacheTime: Infinity,
+      // keepPreviousData: true, 이 부분이 true면 로딩이 계속 false로 나와서 일단 주석 처리 했습니다.
+    }
+  );
 
   const debouncedValue = _.debounce((e: ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
