@@ -1,5 +1,5 @@
-import { useState, ChangeEvent, FormEvent, useEffect, KeyboardEvent, useRef } from 'react';
-import { useKeyArrow, useDebounce } from 'hooks';
+import { useState, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
+import { useDebounce } from 'hooks';
 import { useQuery } from 'react-query';
 import { getDiseaseName } from 'services/search';
 
@@ -58,13 +58,16 @@ const SearchBar = () => {
       <form className={styles.searchBar} onSubmit={onFormSubmit}>
         <BsSearch className={styles.reactIcons} />
         <input
-          type='search'
+          className={styles.searchInput}
+          type='text'
           placeholder='질환명을 입력해 주세요.'
           value={searchText}
           onChange={onInputChange}
           onKeyDown={handleKeyDown}
         />
-        <button type='submit'>검색</button>
+        <button className={styles.btn} type='submit'>
+          검색
+        </button>
       </form>
       {searchText && (
         <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />

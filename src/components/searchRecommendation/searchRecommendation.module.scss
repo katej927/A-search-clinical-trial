@@ -1,3 +1,5 @@
+@use '/src/styles/constants/colors';
+
 .recommendationWrapper {
   display: flex;
   flex-direction: column;
@@ -5,8 +7,20 @@
   max-width: 700px;
   padding: 24px 24px 16px;
   margin-top: 8px;
-  background-color: rgb(255, 255, 255);
+  background-color: colors.$WHITE;
   border-radius: 20px;
+
+  .title {
+    font-size: 13px;
+    color: colors.$PLACEHOLDER_TEXT;
+  }
+
+  .msg {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height: 1.6;
+    letter-spacing: -0.018em;
+  }
 
   .diseaseWrapper {
     display: flex;
@@ -14,12 +28,9 @@
     align-items: center;
     padding-top: 8px;
     padding-bottom: 8px;
+    padding-left: 8px;
     cursor: pointer;
     -webkit-box-align: center;
-
-    &.highlight {
-      background-color: red;
-    }
 
     .searchWord {
       flex: 1 1 0%;
@@ -28,6 +39,11 @@
       font-weight: 400;
       line-height: 1.6;
       letter-spacing: -0.018em;
+
+      &.highlight {
+        font-weight: bold;
+        color: colors.$THEME_COLOR;
+      }
     }
   }
 }

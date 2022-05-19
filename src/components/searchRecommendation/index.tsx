@@ -17,15 +17,16 @@ interface Props {
 const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searchResult, isLoading, nameIdx }, ref) => {
   return (
     <div className={styles.recommendationWrapper}>
+      <span className={styles.title}>추천 검색어</span>
       <ul className={cn('resultWrapper')} ref={ref}>
-        {!searchResult && <li>{isLoading ? LOADING_TEXT : NO_RESULT}</li>}
+        {!searchResult && <li className={styles.msg}>{isLoading ? LOADING_TEXT : NO_RESULT}</li>}
         {searchResult?.map((disease, idx) => {
           const { sickNm } = disease;
           const key = `${disease.sickNm}-${idx}`;
           return (
-            <li key={key} className={cx(styles.diseaseWrapper, { [styles.highlight]: nameIdx === idx })}>
+            <li key={key} className={styles.diseaseWrapper}>
               <BsSearch className={styles.reactIcons} />
-              <span className={styles.searchWord}>{sickNm}</span>
+              <span className={cx(styles.searchWord, { [styles.highlight]: nameIdx === idx })}>{sickNm}</span>
             </li>
           );
         })}

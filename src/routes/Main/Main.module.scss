@@ -1,0 +1,19 @@
+@use '/src/styles/mixins/flexbox';
+
+.mainWrapper {
+  @include flexbox.flexbox(_, center);
+  flex-direction: column;
+  width: inherit;
+  height: inherit;
+  padding-top: 80px;
+
+  h1 {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 54.4px;
+    text-align: center;
+    letter-spacing: -0.612px;
+  }
+}

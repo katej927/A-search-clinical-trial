@@ -9,46 +9,36 @@
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    background-color: #ffffff;
+    padding: 20px 0 20px 24px;
+    background-color: colors.$WHITE;
     border-radius: 30px;
 
-    > div,
-    form {
-      display: inline-block;
+    .reactIcons {
+      margin-right: 12px;
     }
 
-    > div {
-      line-height: 2;
-      vertical-align: middle;
-      background-color: red;
-      border-radius: 35px;
-    }
+    .searchInput {
+      display: flex;
+      width: 500px;
+      height: 100%;
+      font-size: 18px;
+      font-weight: 400;
 
-    form {
-      input {
-        display: flex;
-        padding-top: 20px;
-        padding-right: 24px;
-        padding-bottom: 20px;
-        padding-left: 24px;
-        font-weight: 400;
-
-        ::placeholder {
-          color: colors.$PLACEHOLDER_TEXT;
-        }
+      ::placeholder {
+        color: colors.$PLACEHOLDER_TEXT;
       }
     }
 
-    button {
-      // float: right;
+    .btn {
       padding: 18px 32px;
+      margin-left: 12px;
       font-size: 1.125rem;
       font-weight: 700;
       line-height: 1.6;
-      color: #ffffff;
+      color: colors.$WHITE;
       letter-spacing: -0.018em;
       cursor: pointer;
-      background-color: #007be9;
+      background-color: colors.$THEME_COLOR;
       border-width: 0;
       border-radius: 0 42px 42px 0;
     }
