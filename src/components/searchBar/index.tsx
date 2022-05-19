@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, FormEvent, useEffect, KeyboardEvent, useRef } from 'react';
 import { useKeyArrow, useDebounce } from 'hooks';
 import { useQuery } from 'react-query';
-import { getDiseaseName } from 'services/search';
+import { getSearchResult } from 'services/search';
 
 import SearchRecommendation from 'components/searchRecommendation';
 import { BsSearch } from 'react-icons/bs';
@@ -14,15 +14,15 @@ const SearchBar = () => {
 
   const ref = useRef<HTMLUListElement | null>(null);
 
-  const debouncedValue = useDebounce(searchText); // lodash 로 수정
+  // const debouncedValue = useDebounce(searchText); // lodash 로 수정
 
   const { isLoading, data: searchResult } = useQuery(
-    ['getDiseaseName', debouncedValue],
-    () => getDiseaseName({ searchText: debouncedValue }),
+    ['getDiseaseName', searchText],
+    () => getSearchResult(searchText),
     {
-      keepPreviousData: true,
+      enabled: !!searchText,
+      // keepPreviousData: true,
       refetchOnWindowFocus: false,
-      staleTime: Infinity,
     }
   );
 
@@ -66,9 +66,7 @@ const SearchBar = () => {
         />
         <button type='submit'>검색</button>
       </form>
-      {searchText && (
-        <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
-      )}
+      <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
     </div>
   );
 };
