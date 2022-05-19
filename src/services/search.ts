@@ -10,12 +10,13 @@ export const getSearchResult = async (keyword: string) => {
       },
     })
     .then((res) => {
-      if (keyword === '' || res.data.response.body.totalCount === 0) {
+      const { totalCount, items } = res.data.response.body;
+      if (keyword === '' || totalCount === 0) {
         return [];
       }
-      if (res.data.response.body.totalCount === 1) {
-        return [res.data.response.body.items];
+      if (totalCount === 1) {
+        return [items];
       }
-      return res.data.response.body.items.item;
+      return items.item;
     });
 };
