@@ -1,3 +1,5 @@
+@use '/src/styles/constants/colors';
+
 .recommendationWrapper {
   display: flex;
   flex-direction: column;
@@ -5,6 +7,24 @@
   max-width: 700px;
   padding: 24px 24px 16px;
   margin-top: 8px;
-  background-color: rgb(255, 255, 255);
+  background-color: colors.$WHITE;
   border-radius: 20px;
+
+  .loadingWrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 13px;
+    color: colors.$PLACEHOLDER_TEXT;
+  }
+
+  .msg {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height: 1.6;
+    letter-spacing: -0.018em;
+  }
 }

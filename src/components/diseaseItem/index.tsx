@@ -14,9 +14,9 @@ interface Props {
 const DiseaseItem = ({ disease, nameIdx, idx }: Props) => {
   const { sickNm } = disease;
   return (
-    <li className={cx(styles.diseaseWrapper, { [styles.highlight]: nameIdx === idx })}>
+    <li className={styles.diseaseWrapper}>
       <BsSearch className={styles.reactIcons} />
-      <span className={styles.searchWord}>{sickNm}</span>
+      <span className={cx(styles.searchWord, { [styles.highlight]: nameIdx === idx })}>{sickNm}</span>
     </li>
   );
 };

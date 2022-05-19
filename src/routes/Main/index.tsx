@@ -1,5 +1,5 @@
 import SearchBar from 'components/searchBar';
-import styles from '../routes.module.scss';
+import styles from './Main.module.scss';
 
 const Main = () => {
   return (
