@@ -1,30 +1,22 @@
 import axios from 'axios';
-import { IDiseaseRoot } from 'types/disease';
 
-// const controller = new AbortController();
-
-const BASE_URL = `B551182/diseaseInfoService/getDissNameCodeList?`;
-
-interface Params {
-  searchText: string;
-}
-
-export const getDiseaseName = (params: Params) =>
-  axios
-    .get<IDiseaseRoot>(BASE_URL, {
+export const getSearchResult = async (keyword: string) => {
+  console.log('fetch!');
+  return axios
+    .get(`${process.env.REACT_APP_BASE_URL}`, {
       params: {
-        ServiceKey: process.env.REACT_APP_DISEASE_NAME_SEARCH_ID,
-        ...params,
+        searchText: keyword,
+        ServiceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
       },
-      // signal: controller.signal,
     })
     .then((res) => {
-      const {
-        // totalCount,
-        items: { item },
-      } = res.data.response.body;
-      // if (totalCount === 1) return [item];
-      return item;
+      const { totalCount, items } = res.data.response.body;
+      if (keyword === '' || totalCount === 0) {
+        return [];
+      }
+      if (totalCount === 1) {
+        return [items];
+      }
+      return items.item;
     });
-
-// controller.abort();
+};

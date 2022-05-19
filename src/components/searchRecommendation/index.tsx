@@ -1,12 +1,11 @@
 import { forwardRef } from 'react';
 import { IDiseaseItem } from 'types/disease';
-import { NO_RESULT, LOADING_TEXT } from './texts';
-import { BsSearch } from 'react-icons/bs';
+import { NO_RESULT } from './texts';
+import DiseaseItem from 'components/diseaseItem';
 
 import styles from './searchRecommendation.module.scss';
 import cn from 'classnames';
-
-const cx = cn.bind(styles);
+import { Loading } from 'components/loading';
 
 interface Props {
   searchResult: IDiseaseItem[] | undefined;
@@ -18,19 +17,18 @@ const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searc
   return (
     <div className={styles.recommendationWrapper}>
       <span className={styles.title}>추천 검색어</span>
-      <ul className={cn('resultWrapper')} ref={ref}>
-        {!searchResult && <li className={styles.msg}>{isLoading ? LOADING_TEXT : NO_RESULT}</li>}
-        {searchResult?.map((disease, idx) => {
-          const { sickNm } = disease;
-          const key = `${disease.sickNm}-${idx}`;
-          return (
-            <li key={key} className={styles.diseaseWrapper}>
-              <BsSearch className={styles.reactIcons} />
-              <span className={cx(styles.searchWord, { [styles.highlight]: nameIdx === idx })}>{sickNm}</span>
-            </li>
-          );
-        })}
-      </ul>
+      {isLoading ? (
+        <div className={styles.loadingWrapper}>
+          <Loading />
+        </div>
+      ) : (
+        <ul className={cn('resultWrapper')} ref={ref}>
+          {searchResult?.length === 0 && <p className={styles.msg}>{NO_RESULT}</p>}
+          {searchResult?.map((disease, idx) => (
+            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} nameIdx={nameIdx} idx={idx} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 });
