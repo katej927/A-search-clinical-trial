@@ -1,15 +1,18 @@
-import { useEffect, useState, Dispatch } from 'react';
+import { useState, useEffect } from 'react';
 
-export const useDebounce = (searchText: string): string => {
-  const [debouncedValue, setDebouncedValue] = useState(searchText);
+const useDebounce = (value: string, delay: number) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(searchText), 500);
-
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
     return () => {
       clearTimeout(timer);
     };
-  }, [searchText]);
+  }, [value, delay]);
 
   return debouncedValue;
 };
+
+export default useDebounce;
