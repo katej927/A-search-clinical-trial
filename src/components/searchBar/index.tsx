@@ -14,6 +14,7 @@ const SearchBar = () => {
   const [searchWord, setSearchWord] = useRecoilState(searchWordState);
   const [nameIdx, setNameIdx] = useState(-1);
   const ref = useRef<HTMLUListElement | null>(null);
+
   const [controller, setController] = useState<AbortController>();
   const debouncedSearch = useDebounce(searchWord, 500);
 
