@@ -1,38 +1,40 @@
-import { useState, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
-import { useDebounce } from 'hooks';
+import { useState, FormEvent, KeyboardEvent, useRef } from 'react';
 import { useQuery } from 'react-query';
-import { getSearchResult } from 'services/search';
-
-import SearchRecommendation from 'components/searchRecommendation';
 import { BsSearch } from 'react-icons/bs';
 
+import { getSearchResult } from 'services/search';
+import { searchWordState } from 'states/disease';
+import { useRecoilState } from 'recoil';
+import useDebounce from 'hooks/useDebounce';
+
+import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
 
 const SearchBar = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchWord, setSearchWord] = useRecoilState(searchWordState);
   const [nameIdx, setNameIdx] = useState(-1);
-
   const ref = useRef<HTMLUListElement | null>(null);
 
   const [controller, setController] = useState<AbortController>();
+  const debouncedSearch = useDebounce(searchWord, 500);
 
   const { isLoading, data: searchResult } = useQuery(
-    ['getDiseaseName', searchText],
-    () => getSearchResult(searchText, controller),
+    ['getDiseaseName', debouncedSearch],
+    () => getSearchResult(debouncedSearch, controller),
     {
-      enabled: !!searchText,
+      enabled: !!debouncedSearch,
       refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
     }
   );
 
-  const onInputChange = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (controller) {
       controller.abort();
     }
     setController(new AbortController());
-    setSearchText(value);
+    setSearchWord(e.currentTarget.value.trim());
   };
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -52,7 +54,7 @@ const SearchBar = () => {
         setNameIdx((prevNum) => prevNum - 1);
         break;
       case 'Escape':
-        setSearchText('');
+        setSearchWord('');
         setNameIdx(-1);
         break;
     }
@@ -66,15 +68,14 @@ const SearchBar = () => {
           className={styles.searchInput}
           type='text'
           placeholder='질환명을 입력해 주세요.'
-          value={searchText}
-          onChange={onInputChange}
+          onChange={handleSearchWord}
           onKeyDown={handleKeyDown}
         />
         <button className={styles.btn} type='submit'>
           검색
         </button>
       </form>
-      {searchText && (
+      {searchWord && (
         <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
       )}
     </div>
