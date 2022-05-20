@@ -14,9 +14,11 @@ const SearchBar = () => {
 
   const ref = useRef<HTMLUListElement | null>(null);
 
+  const [controller, setController] = useState<AbortController>();
+
   const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', searchText],
-    () => getSearchResult(searchText),
+    () => getSearchResult(searchText, controller),
     {
       enabled: !!searchText,
       refetchOnWindowFocus: false,
@@ -26,6 +28,10 @@ const SearchBar = () => {
   );
 
   const onInputChange = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (controller) {
+      controller.abort();
+    }
+    setController(new AbortController());
     setSearchText(value);
   };
 
