@@ -1,15 +1,20 @@
-@use '../../styles/mixins/flexbox';
-@use '../../styles/constants/colors';
+@use 'styles/mixins/flexbox';
+@use 'styles/constants/colors';
+@use 'styles//mixins/position';
+@use 'styles/mixins/responsive';
 
 .searchWrapper {
-  min-width: 660px;
+  width: 90%;
+  height: 46px;
 
   .searchBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    width: 100%;
+    height: inherit;
     padding: 20px 0 20px 24px;
+    font-size: 1em;
     background-color: colors.$WHITE;
     border-radius: 30px;
 
@@ -18,10 +23,8 @@
     }
 
     .searchInput {
-      display: flex;
-      width: 500px;
-      height: 100%;
-      font-size: 18px;
+      width: 86%;
+      font-size: inherit;
       font-weight: 400;
 
       ::placeholder {
@@ -30,9 +33,10 @@
     }
 
     .btn {
-      padding: 18px 32px;
+      width: 6em;
+      height: inherit;
       margin-left: 12px;
-      font-size: 1.125rem;
+      font-size: inherit;
       font-weight: 700;
       line-height: 1.6;
       color: colors.$WHITE;
@@ -44,8 +48,14 @@
     }
   }
 }
-@media (max-width: 480px) {
-  .searchWrapper > .searchBar > form > input {
-    font-size: 1em;
+
+@include responsive.after(MD) {
+  .searchWrapper {
+    width: 660px;
+    height: 64px;
+
+    .searchBar {
+      font-size: 1.2em;
+    }
   }
 }
