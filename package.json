@@ -45,6 +45,7 @@
     "react-error-boundary": "^3.1.4",
     "react-i18next": "^11.16.9",
     "react-icons": "^4.3.1",
+    "react-loading": "^2.0.3",
     "react-query": "^3.39.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "6",
