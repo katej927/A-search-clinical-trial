@@ -5,7 +5,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 700px;
-  padding: 24px 24px 16px;
+  padding: 24px 0;
   margin-top: 8px;
   background-color: colors.$WHITE;
   border-radius: 20px;
@@ -17,6 +17,8 @@
   }
 
   .title {
+    padding-bottom: 10px;
+    padding-left: 20px;
     font-size: 13px;
     color: colors.$PLACEHOLDER_TEXT;
   }

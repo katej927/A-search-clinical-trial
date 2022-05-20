@@ -6,6 +6,9 @@ import DiseaseItem from 'components/diseaseItem';
 import styles from './searchRecommendation.module.scss';
 import cn from 'classnames';
 import { Loading } from 'components/loading';
+import { sortWordList } from '../../utils/word';
+import { useRecoilValue } from 'recoil';
+import { searchWordState } from '../../states/disease';
 
 interface Props {
   searchResult: IDiseaseItem[];
@@ -13,6 +16,7 @@ interface Props {
 }
 
 const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchResult, isLoading }, ref) => {
+  const searchWord = useRecoilValue(searchWordState);
   return (
     <div className={styles.recommendationWrapper} ref={ref}>
       <span className={styles.title}>추천 검색어</span>
@@ -23,7 +27,7 @@ const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchR
       ) : (
         <ul className={cn('resultWrapper')}>
           {searchResult?.length === 0 && <p className={styles.msg}>{NO_RESULT}</p>}
-          {searchResult?.map((disease, idx) => (
+          {sortWordList(searchWord, searchResult).map((disease, idx) => (
             <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} idx={idx} />
           ))}
         </ul>
