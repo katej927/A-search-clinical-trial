@@ -42,7 +42,6 @@ const SearchBar = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log('handleKeyDown 내부로 들어옴');
     if (!searchResult || !searchResult.length) return;
 
     console.log('handleKeyDown 리턴 지나고 nameIdx', nameIdx);
