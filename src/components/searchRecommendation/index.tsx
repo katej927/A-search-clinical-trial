@@ -10,10 +10,9 @@ import { Loading } from 'components/loading';
 interface Props {
   searchResult: IDiseaseItem[];
   isLoading: boolean;
-  nameIdx: number;
 }
 
-const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searchResult, isLoading, nameIdx }, ref) => {
+const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searchResult, isLoading }, ref) => {
   return (
     <div className={styles.recommendationWrapper}>
       <span className={styles.title}>추천 검색어</span>
@@ -25,7 +24,7 @@ const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searc
         <ul className={cn('resultWrapper')} ref={ref}>
           {searchResult?.length === 0 && <p className={styles.msg}>{NO_RESULT}</p>}
           {searchResult?.map((disease, idx) => (
-            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} nameIdx={nameIdx} idx={idx} />
+            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} idx={idx} />
           ))}
         </ul>
       )}

@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
-import { useDebounce } from 'hooks';
 import { useQuery } from 'react-query';
+import { useRecoilState } from 'recoil';
+import { keyDownIndexState } from 'states';
 import { getSearchResult } from 'services/search';
 
 import SearchRecommendation from 'components/searchRecommendation';
@@ -10,7 +11,7 @@ import styles from './searchBar.module.scss';
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useState('');
-  const [nameIdx, setNameIdx] = useState(-1);
+  const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
 
   const ref = useRef<HTMLUListElement | null>(null);
 
@@ -34,8 +35,9 @@ const SearchBar = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!searchResult) return;
+    if (!searchResult || !searchResult.length) return;
 
+    console.log('handleKeyDown', nameIdx);
     switch (e.key) {
       case 'ArrowDown':
         setNameIdx((prevNum) => prevNum + 1);
@@ -51,6 +53,8 @@ const SearchBar = () => {
         break;
     }
   };
+
+  console.log('searchResult', searchResult, 'nameIdx', nameIdx);
 
   return (
     <div className={styles.searchWrapper}>
@@ -68,9 +72,7 @@ const SearchBar = () => {
           검색
         </button>
       </form>
-      {searchText && (
-        <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
-      )}
+      {searchText && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} ref={ref} />}
     </div>
   );
 };
