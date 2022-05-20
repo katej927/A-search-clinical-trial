@@ -16,15 +16,15 @@ const SearchBar = () => {
   const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
 
   const [controller, setController] = useState<AbortController>();
-  const debouncedSearch = useDebounce(searchWord, 500);
+  const [debounceTime, setDebounce] = useState(500);
+  const debouncedSearch = useDebounce(searchWord, debounceTime);
   const ref = useRef<HTMLDivElement | null>(null);
 
   const handleSettingBeforeApi = (setSearchWordValue: string, setNameIdxValue?: number) => {
-    if (controller) {
-      controller.abort();
-    }
+    if (controller) controller.abort();
     setController(new AbortController());
     setSearchWord(setSearchWordValue);
+    if (debounceTime === 0) setDebounce(500);
     if (setNameIdxValue) setNameIdx(setNameIdxValue);
   };
 
@@ -50,10 +50,13 @@ const SearchBar = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDebounce(0);
   };
 
   const handleKeyDown = (e: KeyboardEvent) =>
     handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
+
+  console.log('debounceTime', debounceTime);
 
   return (
     <div className={styles.searchWrapper}>

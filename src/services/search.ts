@@ -5,8 +5,8 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
     .get(`${process.env.REACT_APP_BASE_URL}`, {
       signal: controller?.signal,
       params: {
-        searchWord: keyword,
-        ServiceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
+        serviceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
+        searchText: keyword,
       },
     })
     .then((res) => {
