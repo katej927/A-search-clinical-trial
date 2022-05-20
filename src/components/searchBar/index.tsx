@@ -14,8 +14,6 @@ const SearchBar = () => {
 
   const ref = useRef<HTMLUListElement | null>(null);
 
-  // const debouncedValue = useDebounce(searchText); // lodash 로 수정 / 주석처리 일단 했습니다.
-
   const [controller, setController] = useState<AbortController>();
 
   const { isLoading, data: searchResult } = useQuery(
@@ -26,7 +24,6 @@ const SearchBar = () => {
       refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
-      // keepPreviousData: true, 이 부분이 true면 로딩이 계속 false로 나와서 일단 주석 처리 했습니다.
     }
   );
 

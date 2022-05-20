@@ -8,7 +8,7 @@ import cn from 'classnames';
 import { Loading } from 'components/loading';
 
 interface Props {
-  searchResult: IDiseaseItem[] | undefined;
+  searchResult: IDiseaseItem[];
   isLoading: boolean;
   nameIdx: number;
 }
