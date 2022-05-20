@@ -16,16 +16,19 @@ const SearchBar = () => {
   const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
 
   const [controller, setController] = useState<AbortController>();
-  const [debounceTime, setDebounce] = useState(500);
-  const debouncedSearch = useDebounce(searchWord, debounceTime);
+  const [debounceTimer, setDebounceTimer] = useState(500);
+  const debouncedSearch = useDebounce(searchWord, debounceTimer);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const handleSettingBeforeApi = (setSearchWordValue: string, setNameIdxValue?: number) => {
-    if (controller) controller.abort();
-    setController(new AbortController());
+  const handleSettingBeforeApi = (setSearchWordValue = '', setNameIdxValue = -1, needCancelApi = false) => {
+    if (needCancelApi) {
+      if (controller) controller.abort();
+      setController(new AbortController());
+    }
+
     setSearchWord(setSearchWordValue);
-    if (debounceTime === 0) setDebounce(500);
     if (setNameIdxValue) setNameIdx(setNameIdxValue);
+    if (debounceTimer === 0) setDebounceTimer(500);
   };
 
   const { isLoading, data: searchResult } = useQuery(
@@ -40,23 +43,21 @@ const SearchBar = () => {
   );
 
   useClickAway(ref, () => {
-    if (!isLoading) handleSettingBeforeApi('', -1);
+    if (!isLoading) handleSettingBeforeApi();
   });
 
   const handleSearchWord = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined);
+    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setDebounce(0);
+    setDebounceTimer(0);
   };
 
   const handleKeyDown = (e: KeyboardEvent) =>
     handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
-
-  console.log('debounceTime', debounceTime);
 
   return (
     <div className={styles.searchWrapper}>

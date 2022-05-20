@@ -5,12 +5,16 @@ export const handleKeyArrow = (
   e: KeyboardEvent,
   searchResult: IDiseaseItem[],
   setNameIdx: Dispatch<React.SetStateAction<number>>,
-  handleSettingBeforeApi: (setSearchWordValue: string, setNameIdxValue?: number) => void,
+  handleSettingBeforeApi: () => void,
   nameIdx: number
 ) => {
-  if (!searchResult || !searchResult.length || e.nativeEvent.isComposing) return;
+  const {
+    key,
+    nativeEvent: { isComposing },
+  } = e;
+  if (!searchResult || !searchResult.length || isComposing) return;
 
-  switch (e.key) {
+  switch (key) {
     case 'ArrowDown':
       setNameIdx((prevNum) => (searchResult.length === prevNum + 1 ? 0 : prevNum + 1));
       break;
@@ -18,7 +22,7 @@ export const handleKeyArrow = (
       setNameIdx((prevNum) => (prevNum <= 0 ? searchResult.length - 1 : prevNum - 1));
       break;
     case 'Escape':
-      handleSettingBeforeApi('', -1);
+      handleSettingBeforeApi();
       break;
     case 'Enter':
       if (nameIdx === -1) break;
