@@ -1,7 +1,6 @@
 import { useState, FormEvent, KeyboardEvent, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { BsSearch } from 'react-icons/bs';
-import _ from 'lodash';
 
 import { getSearchResult } from 'services/search';
 import { searchWordState } from 'states/disease';
@@ -15,6 +14,7 @@ const SearchBar = () => {
   const [searchWord, setSearchWord] = useRecoilState(searchWordState);
   const [nameIdx, setNameIdx] = useState(-1);
   const ref = useRef<HTMLUListElement | null>(null);
+
   const [controller, setController] = useState<AbortController>();
   const debouncedSearch = useDebounce(searchWord, 500);
 
@@ -26,7 +26,6 @@ const SearchBar = () => {
       refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
-      // keepPreviousData: true, 이 부분이 true면 로딩이 계속 false로 나와서 일단 주석 처리 했습니다.
     }
   );
 
