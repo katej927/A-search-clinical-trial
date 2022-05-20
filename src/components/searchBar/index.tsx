@@ -1,11 +1,12 @@
-import { useState, FormEvent, KeyboardEvent, useRef, ChangeEvent } from 'react';
+import { useState, KeyboardEvent, useRef, ChangeEvent, FormEvent } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
-import { keyDownIndexState } from 'states';
+import { useClickAway } from 'react-use';
+import { keyDownIndexState, searchWordState } from 'states';
+
 import { BsSearch } from 'react-icons/bs';
 import { getSearchResult } from 'services/search';
-import { searchWordState } from 'states/disease';
-import useDebounce from 'hooks/useDebounce';
+import { useDebounce, handleKeyArrow } from 'hooks';
 
 import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
@@ -13,10 +14,19 @@ import styles from './searchBar.module.scss';
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useRecoilState(searchWordState);
   const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
-  const ref = useRef<HTMLUListElement | null>(null);
 
   const [controller, setController] = useState<AbortController>();
   const debouncedSearch = useDebounce(searchWord, 500);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleSettingBeforeApi = (setSearchWordValue: string, setNameIdxValue?: number) => {
+    if (controller) {
+      controller.abort();
+    }
+    setController(new AbortController());
+    setSearchWord(setSearchWordValue);
+    if (setNameIdxValue) setNameIdx(setNameIdxValue);
+  };
 
   const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', debouncedSearch],
@@ -29,43 +39,25 @@ const SearchBar = () => {
     }
   );
 
+  useClickAway(ref, () => {
+    if (!isLoading) handleSettingBeforeApi('', -1);
+  });
+
   const handleSearchWord = (e: ChangeEvent<HTMLInputElement>) => {
-    if (controller) {
-      controller.abort();
-    }
-    setController(new AbortController());
-    setSearchWord(e.currentTarget.value.trim());
+    const { value } = e.currentTarget;
+    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined);
   };
 
-  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!searchResult || !searchResult.length) return;
-
-    console.log('handleKeyDown 리턴 지나고 nameIdx', nameIdx);
-    switch (e.key) {
-      case 'ArrowDown':
-        if (ref.current?.childElementCount === nameIdx + 1) setNameIdx(0);
-        else setNameIdx((prevNum) => prevNum + 1);
-        break;
-      case 'ArrowUp':
-        if (nameIdx === 0 && searchResult) setNameIdx(searchResult.length);
-        setNameIdx((prevNum) => prevNum - 1);
-        break;
-      case 'Escape':
-        setSearchWord('');
-        setNameIdx(-1);
-        break;
-    }
-  };
-
-  console.log('searchResult', searchResult, 'nameIdx', nameIdx);
+  const handleKeyDown = (e: KeyboardEvent) =>
+    handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
 
   return (
     <div className={styles.searchWrapper}>
-      <form className={styles.searchBar} onSubmit={onFormSubmit}>
+      <form className={styles.searchBar} onSubmit={handleSubmit}>
         <BsSearch className={styles.reactIcons} />
         <input
           className={styles.searchInput}
@@ -73,6 +65,7 @@ const SearchBar = () => {
           placeholder='질환명을 입력해 주세요.'
           onChange={handleSearchWord}
           onKeyDown={handleKeyDown}
+          value={searchWord}
         />
         <button className={styles.btn} type='submit'>
           검색

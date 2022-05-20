@@ -16,8 +16,6 @@ const DiseaseItem = ({ disease, idx }: Props) => {
   const nameIdx = useRecoilValue(keyDownIndexState);
   const { sickNm } = disease;
 
-  // console.log('nameIdx', nameIdx, 'idx', idx, 'nameIdx === idx', nameIdx === idx);
-
   return (
     <li className={styles.diseaseWrapper}>
       <BsSearch className={styles.reactIcons} />
