@@ -1,7 +1,6 @@
 import { useState, FormEvent, KeyboardEvent, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { BsSearch } from 'react-icons/bs';
-import _ from 'lodash';
 
 import { getSearchResult } from 'services/search';
 import { searchWordState } from 'states/disease';
