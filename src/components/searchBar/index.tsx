@@ -17,6 +17,7 @@ const SearchBar = () => {
 
   const [controller, setController] = useState<AbortController>();
   const [debounceTimer, setDebounceTimer] = useState(500);
+  const [dataFetchCount, setDataFetchCount] = useState(1);
   const debouncedSearch = useDebounce(searchWord, debounceTimer);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -31,6 +32,11 @@ const SearchBar = () => {
     if (debounceTimer === 0) setDebounceTimer(500);
   };
 
+  const onSuccessDataFetch = () => {
+    console.log(`API가 ${dataFetchCount}번 호출되었습니다!`);
+    setDataFetchCount((prev) => prev + 1);
+  };
+
   const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', debouncedSearch],
     () => getSearchResult(debouncedSearch, controller),
@@ -39,6 +45,8 @@ const SearchBar = () => {
       refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
+      onSuccess: () => onSuccessDataFetch(),
+      // onSuccess: () => console.log('하이'),
     }
   );
 
