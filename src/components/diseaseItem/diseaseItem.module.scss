@@ -1,37 +1,45 @@
 @use '/src/styles/constants/colors';
 
-.diseaseWrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 20px;
-  cursor: pointer;
-  -webkit-box-align: center;
+.link {
+  color: inherit;
 
-  &.highlight {
-    background-color: colors.$HIGHLIGHT_BACKGROUND;
-  }
+  .diseaseWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 20px;
+    cursor: pointer;
+    -webkit-box-align: center;
 
-  .searchWord {
-    flex: 1 1 0%;
-    margin-left: 12px;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.6;
-    letter-spacing: -0.018em;
-
-    &.highlight {
-      color: colors.$THEME_COLOR;
+    &:hover {
+      background-color: colors.$HIGHLIGHT_BACKGROUND;
     }
 
-    > mark {
-      font-weight: bold;
-      background-color: transparent;
+    &.highlight {
+      background-color: colors.$HIGHLIGHT_BACKGROUND;
+    }
+
+    .searchWord {
+      flex: 1 1 0%;
+      margin-left: 12px;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.018em;
 
       &.highlight {
         color: colors.$THEME_COLOR;
+      }
+
+      > mark {
+        font-weight: bold;
+        background-color: transparent;
+
+        &.highlight {
+          color: colors.$THEME_COLOR;
+        }
       }
     }
   }

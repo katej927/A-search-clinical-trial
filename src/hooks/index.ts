@@ -1,2 +1,2 @@
 export { useDebounce } from './useDebounce';
-export { handleKeyArrow } from './handleKeyArrow';
+export { handleKeyArrow } from '../utils/handleKeyArrow';

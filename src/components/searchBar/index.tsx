@@ -1,12 +1,12 @@
 import { useState, KeyboardEvent, useRef, ChangeEvent, FormEvent } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
-import { useClickAway } from 'react-use';
 import { keyDownIndexState, searchWordState } from 'states';
 
 import { BsSearch } from 'react-icons/bs';
-import { getSearchResult } from 'services/search';
-import { useDebounce, handleKeyArrow } from 'hooks';
+import { getSearchResult } from 'services';
+import { useDebounce } from 'hooks';
+import { handleKeyArrow } from 'utils';
 
 import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
@@ -42,10 +42,6 @@ const SearchBar = () => {
     }
   );
 
-  useClickAway(ref, () => {
-    if (!isLoading) handleSettingBeforeApi();
-  });
-
   const handleSearchWord = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
@@ -57,7 +53,8 @@ const SearchBar = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent) =>
-    handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
+    // handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
+    handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
 
   return (
     <div className={styles.searchWrapper}>
