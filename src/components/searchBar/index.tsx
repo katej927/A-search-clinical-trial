@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent, KeyboardEvent, useRef } from 'react';
+import { useState, FormEvent, KeyboardEvent, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { BsSearch } from 'react-icons/bs';
 import _ from 'lodash';
@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { getSearchResult } from 'services/search';
 import { searchWordState } from 'states/disease';
 import { useRecoilState } from 'recoil';
+import useDebounce from 'hooks/useDebounce';
 
 import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
@@ -15,33 +16,28 @@ const SearchBar = () => {
   const [nameIdx, setNameIdx] = useState(-1);
   const ref = useRef<HTMLUListElement | null>(null);
   const [controller, setController] = useState<AbortController>();
-
-  useEffect(() => {
-    console.log('searchWord', searchWord);
-  }, [searchWord]);
-
-  const onChangeDebounce = _.debounce((e: ChangeEvent<HTMLInputElement>) => {
-    setSearchWord(e.target.value);
-  }, 500);
-
-  useEffect(() => {
-    if (controller) {
-      controller.abort();
-    }
-    setController(new AbortController());
-  }, [searchWord]);
+  const debouncedSearch = useDebounce(searchWord, 500);
 
   const { isLoading, data: searchResult } = useQuery(
-    ['getDiseaseName', searchWord],
-    () => getSearchResult(searchWord, controller),
+    ['getDiseaseName', debouncedSearch],
+    () => getSearchResult(debouncedSearch, controller),
     {
-      enabled: !!searchWord,
+      enabled: !!debouncedSearch,
       refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
       // keepPreviousData: true, 이 부분이 true면 로딩이 계속 false로 나와서 일단 주석 처리 했습니다.
     }
   );
+
+  const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (controller) {
+      controller.abort();
+    }
+    setController(new AbortController());
+    setSearchWord(e.currentTarget.value.trim());
+  };
+
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -73,7 +69,7 @@ const SearchBar = () => {
           className={styles.searchInput}
           type='text'
           placeholder='질환명을 입력해 주세요.'
-          onChange={onChangeDebounce}
+          onChange={handleSearchWord}
           onKeyDown={handleKeyDown}
         />
         <button className={styles.btn} type='submit'>
