@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import { IDiseaseItem } from 'types/disease';
-import { NO_RESULT } from './texts';
 import DiseaseItem from 'components/diseaseItem';
 
 import styles from './searchRecommendation.module.scss';
@@ -26,7 +25,7 @@ const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchR
         </div>
       ) : (
         <ul className={cn('resultWrapper')}>
-          {searchResult?.length === 0 && <p className={styles.msg}>{NO_RESULT}</p>}
+          {searchResult?.length === 0 && <p className={styles.msg}>검색된 값이 없습니다.</p>}
           {sortWordList(searchWord, searchResult).map((disease, idx) => (
             <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} idx={idx} />
           ))}
