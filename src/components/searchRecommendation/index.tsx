@@ -13,23 +13,22 @@ import { searchWordState } from '../../states/disease';
 interface Props {
   searchResult: IDiseaseItem[];
   isLoading: boolean;
-  nameIdx: number;
 }
 
-const SearchRecommendation = forwardRef<HTMLUListElement | null, Props>(({ searchResult, isLoading, nameIdx }, ref) => {
+const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchResult, isLoading }, ref) => {
   const searchWord = useRecoilValue(searchWordState);
   return (
-    <div className={styles.recommendationWrapper}>
+    <div className={styles.recommendationWrapper} ref={ref}>
       <span className={styles.title}>추천 검색어</span>
       {isLoading ? (
         <div className={styles.loadingWrapper}>
           <Loading />
         </div>
       ) : (
-        <ul className={cn('resultWrapper')} ref={ref}>
+        <ul className={cn('resultWrapper')}>
           {searchResult?.length === 0 && <p className={styles.msg}>{NO_RESULT}</p>}
           {sortWordList(searchWord, searchResult).map((disease, idx) => (
-            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} nameIdx={nameIdx} idx={idx} />
+            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} idx={idx} />
           ))}
         </ul>
       )}

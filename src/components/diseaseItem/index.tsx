@@ -1,30 +1,36 @@
-import styles from './diseaseItem.module.scss';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { keyDownIndexState } from 'states';
 import { BsSearch } from 'react-icons/bs';
+import styles from './diseaseItem.module.scss';
 import cn from 'classnames';
 import { IDiseaseItem } from 'types/disease';
-import { useRecoilValue } from 'recoil';
 import { searchWordState } from '../../states/disease';
+import { CLINICALTRIALSKOREA } from 'services';
 
 const cx = cn.bind(styles);
 
 interface Props {
   disease: IDiseaseItem;
-  nameIdx: number;
   idx: number;
 }
 
-const DiseaseItem = ({ disease, nameIdx, idx }: Props) => {
+const DiseaseItem = ({ disease, idx }: Props) => {
+  const nameIdx = useRecoilValue(keyDownIndexState);
+  const [searchWord, setSearchWord] = useRecoilState(searchWordState);
+
   const { sickNm } = disease;
-  const searchWord = useRecoilValue(searchWordState);
+
   return (
-    <li className={styles.diseaseWrapper}>
-      <BsSearch className={styles.reactIcons} />
-      <span className={cx(styles.searchWord, { [styles.highlight]: nameIdx === idx })}>
-        {sickNm.substring(0, sickNm.indexOf(searchWord))}
-        <mark>{searchWord}</mark>
-        {sickNm.substring(sickNm.indexOf(searchWord) + searchWord.length)}
-      </span>
-    </li>
+    <a href={`${CLINICALTRIALSKOREA}${sickNm}`} className={styles.link}>
+      <li className={cx(styles.diseaseWrapper, { [styles.highlight]: nameIdx === idx })}>
+        <BsSearch className={styles.reactIcons} />
+        <span className={cx(styles.searchWord, { [styles.highlight]: nameIdx === idx })}>
+          {sickNm.substring(0, sickNm.indexOf(searchWord))}
+          <mark className={cx(styles.mark, { [styles.highlight]: nameIdx === idx })}>{searchWord}</mark>
+          {sickNm.substring(sickNm.indexOf(searchWord) + searchWord.length)}
+        </span>
+      </li>
+    </a>
   );
 };
 

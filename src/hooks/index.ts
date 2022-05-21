@@ -1,2 +1,1 @@
-export { useKeys } from './useKeys';
-export { useKeyArrow } from './useKeyArrow';
+export { useDebounce } from './useDebounce';

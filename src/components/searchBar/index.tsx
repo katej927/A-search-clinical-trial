@@ -1,22 +1,35 @@
-import { useState, FormEvent, KeyboardEvent, useRef } from 'react';
+import { useState, KeyboardEvent, useRef, ChangeEvent, FormEvent } from 'react';
 import { useQuery } from 'react-query';
-import { BsSearch } from 'react-icons/bs';
-
-import { getSearchResult } from 'services/search';
-import { searchWordState } from 'states/disease';
 import { useRecoilState } from 'recoil';
-import useDebounce from 'hooks/useDebounce';
+import { keyDownIndexState, searchWordState } from 'states';
+
+import { BsSearch } from 'react-icons/bs';
+import { getSearchResult } from 'services';
+import { useDebounce } from 'hooks';
+import { handleKeyArrow } from 'utils';
 
 import SearchRecommendation from 'components/searchRecommendation';
 import styles from './searchBar.module.scss';
 
 const SearchBar = () => {
   const [searchWord, setSearchWord] = useRecoilState(searchWordState);
-  const [nameIdx, setNameIdx] = useState(-1);
-  const ref = useRef<HTMLUListElement | null>(null);
+  const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
 
   const [controller, setController] = useState<AbortController>();
-  const debouncedSearch = useDebounce(searchWord, 500);
+  const [debounceTimer, setDebounceTimer] = useState(500);
+  const debouncedSearch = useDebounce(searchWord, debounceTimer);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleSettingBeforeApi = (setSearchWordValue = '', setNameIdxValue = -1, needCancelApi = false) => {
+    if (needCancelApi) {
+      if (controller) controller.abort();
+      setController(new AbortController());
+    }
+
+    setSearchWord(setSearchWordValue);
+    if (setNameIdxValue) setNameIdx(setNameIdxValue);
+    if (debounceTimer === 0) setDebounceTimer(500);
+  };
 
   const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', debouncedSearch],
@@ -29,40 +42,23 @@ const SearchBar = () => {
     }
   );
 
-  const handleSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (controller) {
-      controller.abort();
-    }
-    setController(new AbortController());
-    setSearchWord(e.currentTarget.value.trim());
+  const handleSearchWord = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
   };
 
-  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDebounceTimer(0);
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!searchResult) return;
-
-    switch (e.key) {
-      case 'ArrowDown':
-        setNameIdx((prevNum) => prevNum + 1);
-        if (ref.current?.childElementCount === nameIdx + 1) setNameIdx(0);
-        break;
-      case 'ArrowUp':
-        if (nameIdx === -1 && searchResult) setNameIdx(searchResult.length);
-        setNameIdx((prevNum) => prevNum - 1);
-        break;
-      case 'Escape':
-        setSearchWord('');
-        setNameIdx(-1);
-        break;
-    }
-  };
+  const handleKeyDown = (e: KeyboardEvent) =>
+    // handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
+    handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
 
   return (
     <div className={styles.searchWrapper}>
-      <form className={styles.searchBar} onSubmit={onFormSubmit}>
+      <form className={styles.searchBar} onSubmit={handleSubmit}>
         <BsSearch className={styles.reactIcons} />
         <input
           className={styles.searchInput}
@@ -70,14 +66,13 @@ const SearchBar = () => {
           placeholder='질환명을 입력해 주세요.'
           onChange={handleSearchWord}
           onKeyDown={handleKeyDown}
+          value={searchWord}
         />
         <button className={styles.btn} type='submit'>
           검색
         </button>
       </form>
-      {searchWord && (
-        <SearchRecommendation searchResult={searchResult} isLoading={isLoading} nameIdx={nameIdx} ref={ref} />
-      )}
+      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} ref={ref} />}
     </div>
   );
 };

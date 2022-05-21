@@ -1,13 +1,12 @@
 import axios from 'axios';
 
 export const getSearchResult = async (keyword: string, controller?: AbortController) => {
-  console.log('fetch!');
   return axios
     .get(`${process.env.REACT_APP_BASE_URL}`, {
       signal: controller?.signal,
       params: {
+        serviceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
         searchText: keyword,
-        ServiceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
       },
     })
     .then((res) => {
@@ -21,3 +20,5 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
       return items.item;
     });
 };
+
+export const CLINICALTRIALSKOREA = 'https://clinicaltrialskorea.com/studies?condition=';
