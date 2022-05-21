@@ -17,10 +17,7 @@ interface Props {
 const DiseaseItem = ({ disease, idx }: Props) => {
   const nameIdx = useRecoilValue(keyDownIndexState);
   const searchWord = useRecoilValue(searchWordState);
-
   const { sickNm } = disease;
-
-  console.log('disease', disease);
 
   return (
     <a href={`${CLINICALTRIALSKOREA}${sickNm}`} className={styles.link}>

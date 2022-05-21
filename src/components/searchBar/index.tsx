@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, KeyboardEvent, ChangeEvent, FormEvent } from 'react';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { keyDownIndexState, searchWordState } from 'states';
@@ -20,18 +20,6 @@ const SearchBar = () => {
   const [debounceTimer, setDebounceTimer] = useState(500);
 
   const debouncedSearch = useDebounce(searchWord, debounceTimer);
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const handleSettingBeforeApi = (setSearchWordValue = '', setNameIdxValue = -1, needCancelApi = false) => {
-    if (needCancelApi) {
-      if (controller) controller.abort();
-      setController(new AbortController());
-    }
-
-    if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
-    setSearchWord(setSearchWordValue);
-    if (debounceTimer === 0) setDebounceTimer(500);
-  };
 
   const onSuccessDataFetch = () => {
     console.log(`API가 ${dataFetchCount}번 호출되었습니다!`);
@@ -49,10 +37,27 @@ const SearchBar = () => {
     }
   );
 
-  const handleSearchWord = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
-    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
+  const handleSettingBeforeApi = (setSearchWordValue = '', setNameIdxValue = -1, needCancelApi = false) => {
+    if (needCancelApi) {
+      if (controller) controller.abort();
+      setController(new AbortController());
+    }
+
+    if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
+    setSearchWord(setSearchWordValue);
+    if (debounceTimer === 0) setDebounceTimer(500);
   };
+
+  const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) =>
+    handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
+
+  const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
+
+  const handleKeyDownName = (): string => {
+    if (searchResult && nameIdx > -1) return searchResult[nameIdx].sickNm;
+    return searchWord;
+  };
+  const keyDownName = handleKeyDownName();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,15 +66,6 @@ const SearchBar = () => {
       window.location.href = `${CLINICALTRIALSKOREA}${searchResult[nameIdx].sickNm}`;
     }
   };
-
-  const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
-
-  const handleKeyDownName = (): string => {
-    if (searchResult && nameIdx > -1) return searchResult[nameIdx].sickNm;
-    return searchWord;
-  };
-
-  const keyDownName = handleKeyDownName();
 
   return (
     <div className={styles.searchWrapper}>
@@ -87,7 +83,7 @@ const SearchBar = () => {
           검색
         </button>
       </form>
-      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} ref={ref} />}
+      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} />}
     </div>
   );
 };

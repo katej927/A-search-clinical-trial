@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { IDiseaseItem } from 'types/disease';
 import DiseaseItem from 'components/diseaseItem';
 
@@ -14,12 +13,10 @@ interface Props {
   isLoading: boolean;
 }
 
-const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchResult, isLoading }, ref) => {
-  console.log('추천창 searchResult', searchResult);
-
+const SearchRecommendation = ({ searchResult, isLoading }: Props) => {
   const searchWord = useRecoilValue(searchWordState);
   return (
-    <div className={styles.recommendationWrapper} ref={ref}>
+    <div className={styles.recommendationWrapper}>
       <span className={styles.title}>추천 검색어</span>
       {isLoading ? (
         <div className={styles.loadingWrapper}>
@@ -35,7 +32,7 @@ const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchR
       )}
     </div>
   );
-});
+};
 
 SearchRecommendation.displayName = 'SearchRecommendation';
 
