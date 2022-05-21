@@ -1,19 +1,20 @@
-import styles from './diseaseItem.module.scss';
+import { useRecoilValue } from 'recoil';
+import { keyDownIndexState } from 'states';
 import { BsSearch } from 'react-icons/bs';
+import styles from './diseaseItem.module.scss';
 import cn from 'classnames';
 import { IDiseaseItem } from 'types/disease';
-import { useRecoilValue } from 'recoil';
 import { searchWordState } from '../../states/disease';
 
 const cx = cn.bind(styles);
 
 interface Props {
   disease: IDiseaseItem;
-  nameIdx: number;
   idx: number;
 }
 
-const DiseaseItem = ({ disease, nameIdx, idx }: Props) => {
+const DiseaseItem = ({ disease, idx }: Props) => {
+  const nameIdx = useRecoilValue(keyDownIndexState);
   const { sickNm } = disease;
   const searchWord = useRecoilValue(searchWordState);
   return (
