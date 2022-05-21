@@ -1,15 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import styles from './routes.module.scss';
 import Main from './Main';
 
 const App = () => {
   return (
-    <div className={styles.app}>
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='*' element={<div>404</div>} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path='/' element={<Main />} />
+      <Route path='*' element={<div>페이지를 찾을 수 없습니다.</div>} />
+    </Routes>
   );
 };
 

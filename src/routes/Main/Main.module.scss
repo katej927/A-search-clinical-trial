@@ -1,26 +1,35 @@
 @use '/src/styles/mixins/flexbox';
 @use 'styles/mixins/responsive';
+@use '/src/styles/constants/colors';
 
 .mainWrapper {
-  @include flexbox.flexbox(_, center);
-  flex-direction: column;
-  width: inherit;
-  height: inherit;
-  padding-top: 80px;
+  @include flexbox.flexbox(center, center);
+  width: 100%;
+  min-width: 320px;
+  height: 100vh;
+  background-color: colors.$BG;
 
-  h1 {
-    display: block;
-    margin-bottom: 20px;
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.6;
-    text-align: center;
-    letter-spacing: -0.612px;
+  .content {
+    @include flexbox.flexbox(_, center);
+    flex-direction: column;
+    width: inherit;
+    height: inherit;
+    padding-top: 80px;
+
+    header {
+      display: block;
+      margin-bottom: 20px;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.6;
+      text-align: center;
+      letter-spacing: -0.612px;
+    }
   }
-}
 
-@include responsive.after(MD) {
-  .mainWrapper h1 {
-    font-size: 34px;
+  @include responsive.after(MD) {
+    .mainWrapper header {
+      font-size: 34px;
+    }
   }
 }

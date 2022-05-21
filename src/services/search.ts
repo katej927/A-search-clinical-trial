@@ -7,6 +7,10 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
     .get(`${PROXY}/${process.env.REACT_APP_BASE_URL}`, {
       signal: controller?.signal,
       params: {
+        numOfRows: 10,
+        sickType: 1,
+        medTp: 2,
+        diseaseType: 'SICK_NM',
         serviceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
         searchText: keyword,
       },
@@ -23,6 +27,10 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
         return [item];
       }
       return item;
+    })
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      e.code !== 'ERR_CANCELED' && console.log(e);
     });
 };
 

@@ -1,6 +1,5 @@
 @use 'styles/mixins/flexbox';
 @use 'styles/constants/colors';
-@use 'styles//mixins/position';
 @use 'styles/mixins/responsive';
 
 .searchWrapper {
@@ -29,6 +28,19 @@
 
       ::placeholder {
         color: colors.$PLACEHOLDER_TEXT;
+      }
+
+      &::-ms-clear,
+      &::-ms-reveal {
+        display: none;
+      }
+
+      /* 크롬의 경우 */
+      &::-webkit-search-decoration,
+      &::-webkit-search-cancel-button,
+      &::-webkit-search-results-button,
+      &::-webkit-search-results-decoration {
+        display: none;
       }
     }
 

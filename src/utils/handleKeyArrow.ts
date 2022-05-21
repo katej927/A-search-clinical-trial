@@ -1,5 +1,5 @@
-import { KeyboardEvent, Dispatch } from 'react';
 import { IDiseaseItem } from 'types/disease';
+import { KeyboardEvent, Dispatch } from 'react';
 
 export const handleKeyArrow = (
   e: KeyboardEvent,

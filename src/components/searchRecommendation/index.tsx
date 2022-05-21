@@ -1,12 +1,13 @@
+import cn from 'classnames';
+import { useRecoilValue } from 'recoil';
+
 import { IDiseaseItem } from 'types/disease';
-import DiseaseItem from 'components/diseaseItem';
+import { sortWordList } from '../../utils/word';
+import { searchWordState } from '../../states/disease';
 
 import styles from './searchRecommendation.module.scss';
-import cn from 'classnames';
 import { Loading } from 'components/loading';
-import { sortWordList } from '../../utils/word';
-import { useRecoilValue } from 'recoil';
-import { searchWordState } from '../../states/disease';
+import DiseaseItem from 'components/diseaseItem';
 
 interface Props {
   searchResult: IDiseaseItem[];
@@ -26,7 +27,7 @@ const SearchRecommendation = ({ searchResult, isLoading }: Props) => {
         <ul className={cn('resultWrapper')}>
           {searchResult?.length === 0 && <p className={styles.msg}>검색된 값이 없습니다.</p>}
           {sortWordList(searchWord, searchResult).map((disease, idx) => (
-            <DiseaseItem key={`${disease.sickNm}-${idx}`} disease={disease} idx={idx} />
+            <DiseaseItem key={`${disease.sickNm}-${idx + 1}`} disease={disease} idx={idx} />
           ))}
         </ul>
       )}
