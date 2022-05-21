@@ -20,3 +20,5 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
       return items.item;
     });
 };
+
+export const CLINICALTRIALSKOREA = 'https://clinicaltrialskorea.com/studies?condition=';
