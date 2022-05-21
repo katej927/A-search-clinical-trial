@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
+
 export const getSearchResult = async (keyword: string, controller?: AbortController) => {
   return axios
-    .get(`${process.env.REACT_APP_BASE_URL}`, {
+    .get(`${PROXY}/${process.env.REACT_APP_BASE_URL}`, {
       signal: controller?.signal,
       params: {
         serviceKey: `${process.env.REACT_APP_SERVICE_KEY}`,
