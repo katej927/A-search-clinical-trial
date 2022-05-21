@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { keyDownIndexState, searchWordState } from 'states';
 
 import { BsSearch } from 'react-icons/bs';
-import { getSearchResult } from 'services';
+import { getSearchResult, CLINICALTRIALSKOREA } from 'services';
 import { useDebounce } from 'hooks';
 import { handleKeyArrow } from 'utils';
 
@@ -16,8 +16,9 @@ const SearchBar = () => {
   const [nameIdx, setNameIdx] = useRecoilState(keyDownIndexState);
 
   const [controller, setController] = useState<AbortController>();
-  const [debounceTimer, setDebounceTimer] = useState(500);
   const [dataFetchCount, setDataFetchCount] = useState(1);
+  const [debounceTimer, setDebounceTimer] = useState(500);
+
   const debouncedSearch = useDebounce(searchWord, debounceTimer);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -27,8 +28,8 @@ const SearchBar = () => {
       setController(new AbortController());
     }
 
+    if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
     setSearchWord(setSearchWordValue);
-    if (setNameIdxValue) setNameIdx(setNameIdxValue);
     if (debounceTimer === 0) setDebounceTimer(500);
   };
 
@@ -42,11 +43,9 @@ const SearchBar = () => {
     () => getSearchResult(debouncedSearch, controller),
     {
       enabled: !!debouncedSearch,
-      refetchOnWindowFocus: false,
       staleTime: 6 * 10 * 1000,
       cacheTime: Infinity,
       onSuccess: () => onSuccessDataFetch(),
-      // onSuccess: () => console.log('하이'),
     }
   );
 
@@ -58,11 +57,19 @@ const SearchBar = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setDebounceTimer(0);
+    if (nameIdx >= 0) {
+      window.location.href = `${CLINICALTRIALSKOREA}${searchResult[nameIdx].sickNm}`;
+    }
   };
 
-  const handleKeyDown = (e: KeyboardEvent) =>
-    // handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi, nameIdx);
-    handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
+  const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
+
+  const handleKeyDownName = (): string => {
+    if (searchResult && nameIdx > -1) return searchResult[nameIdx].sickNm;
+    return searchWord;
+  };
+
+  const keyDownName = handleKeyDownName();
 
   return (
     <div className={styles.searchWrapper}>
@@ -74,7 +81,7 @@ const SearchBar = () => {
           placeholder='질환명을 입력해 주세요.'
           onChange={handleSearchWord}
           onKeyDown={handleKeyDown}
-          value={searchWord}
+          value={keyDownName}
         />
         <button className={styles.btn} type='submit'>
           검색

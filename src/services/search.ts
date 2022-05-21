@@ -12,14 +12,17 @@ export const getSearchResult = async (keyword: string, controller?: AbortControl
       },
     })
     .then((res) => {
-      const { totalCount, items } = res.data.response.body;
+      const {
+        totalCount,
+        items: { item },
+      } = res.data.response.body;
       if (keyword === '' || totalCount === 0) {
         return [];
       }
       if (totalCount === 1) {
-        return [items];
+        return [item];
       }
-      return items.item;
+      return item;
     });
 };
 

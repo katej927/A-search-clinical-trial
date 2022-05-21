@@ -15,6 +15,8 @@ interface Props {
 }
 
 const SearchRecommendation = forwardRef<HTMLDivElement | null, Props>(({ searchResult, isLoading }, ref) => {
+  console.log('추천창 searchResult', searchResult);
+
   const searchWord = useRecoilValue(searchWordState);
   return (
     <div className={styles.recommendationWrapper} ref={ref}>

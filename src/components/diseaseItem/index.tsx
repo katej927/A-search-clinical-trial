@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { keyDownIndexState } from 'states';
 import { BsSearch } from 'react-icons/bs';
 import styles from './diseaseItem.module.scss';
@@ -16,9 +16,11 @@ interface Props {
 
 const DiseaseItem = ({ disease, idx }: Props) => {
   const nameIdx = useRecoilValue(keyDownIndexState);
-  const [searchWord, setSearchWord] = useRecoilState(searchWordState);
+  const searchWord = useRecoilValue(searchWordState);
 
   const { sickNm } = disease;
+
+  console.log('disease', disease);
 
   return (
     <a href={`${CLINICALTRIALSKOREA}${sickNm}`} className={styles.link}>
