@@ -1,12 +1,11 @@
-import { KeyboardEvent, Dispatch } from 'react';
 import { IDiseaseItem } from 'types/disease';
+import { KeyboardEvent, Dispatch } from 'react';
 
 export const handleKeyArrow = (
   e: KeyboardEvent,
   searchResult: IDiseaseItem[],
   setNameIdx: Dispatch<React.SetStateAction<number>>,
-  handleSettingBeforeApi: () => void
-  // nameIdx: number
+  handleSettingBeforeApi: (setSearchWordValue?: string, setNameIdxValue?: number) => void
 ) => {
   const {
     key,
@@ -24,9 +23,5 @@ export const handleKeyArrow = (
     case 'Escape':
       handleSettingBeforeApi();
       break;
-    // case 'Enter':
-    //   if (nameIdx === -1) break;
-    //   console.log(`임상시험 명: ${searchResult[nameIdx].sickNm}`);
-    //   break;
   }
 };
