@@ -21,6 +21,8 @@ const DiseaseItem = ({ disease, idx }: Props) => {
   const searchWord = useRecoilValue(searchWordState);
   const { sickNm } = disease;
 
+  console.log('sickNm', sickNm);
+
   return (
     <a href={`${CLINICALTRIALSKOREA}${sickNm}`} className={styles.link}>
       <li className={cx(styles.diseaseWrapper, { [styles.highlight]: nameIdx === idx })}>

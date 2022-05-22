@@ -17,9 +17,8 @@ const SearchBar = () => {
 
   const [controller, setController] = useState<AbortController>();
   const [dataFetchCount, setDataFetchCount] = useState(1);
-  const [debounceTimer, setDebounceTimer] = useState(500);
 
-  const debouncedSearch = useDebounce(searchWord, debounceTimer);
+  const debouncedSearch = useDebounce(searchWord);
 
   const onSuccessDataFetch = () => {
     // eslint-disable-next-line no-console
@@ -45,7 +44,6 @@ const SearchBar = () => {
     }
     if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
     setSearchWord(setSearchWordValue);
-    if (debounceTimer === 0) setDebounceTimer(500);
   };
 
   const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) =>
@@ -57,10 +55,7 @@ const SearchBar = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setDebounceTimer(0);
-    if (nameIdx >= 0) {
-      window.location.href = `${CLINICALTRIALSKOREA}${searchResult[nameIdx].sickNm}`;
-    }
+    window.location.href = `${CLINICALTRIALSKOREA}${nameIdx >= 0 ? searchResult[nameIdx].sickNm : searchWord}`;
   };
 
   return (
