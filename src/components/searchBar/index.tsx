@@ -17,7 +17,7 @@ const SearchBar = () => {
 
   const [controller, setController] = useState<AbortController>();
   const [dataFetchCount, setDataFetchCount] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSearch = useDebounce(searchWord);
 
@@ -44,13 +44,8 @@ const SearchBar = () => {
       setController(new AbortController());
     }
     if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
-    if (setSearchWordValue) setIsLoading(true);
     setSearchWord(setSearchWordValue);
   };
-
-  useEffect(() => {
-    if (!isQueryLoading) setIsLoading(false);
-  }, [isQueryLoading]);
 
   const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) =>
     handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
@@ -78,7 +73,7 @@ const SearchBar = () => {
           검색
         </button>
       </form>
-      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} />}
+      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isQueryLoading} />}
     </main>
   );
 };

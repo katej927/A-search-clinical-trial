@@ -21,9 +21,7 @@ const SearchRecommendation = ({ searchResult, isLoading }: Props) => {
     <div className={styles.recommendationWrapper}>
       <span className={styles.title}>추천 검색어</span>
       {isLoading ? (
-        <div className={styles.loadingWrapper}>
-          <Loading />
-        </div>
+        <Loading />
       ) : (
         <ul className={cn('resultWrapper')}>
           {searchResult?.length === 0 && <p className={styles.msg}>검색된 값이 없습니다.</p>}
