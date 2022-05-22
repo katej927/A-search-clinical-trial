@@ -1,4 +1,4 @@
-# 🚩 프로젝트 상세
+#  🏷 프로젝트 상세
 
 > 🚀 
 [**Deploy Link**](https://1a-search-clinical-trial.netlify.app/)
@@ -6,34 +6,7 @@
 
 휴먼 스케이프 선발 과제로 검색어 추천이 있는 검색창 구현 프로젝트입니다.
 
-# ☑️ 요구 사항
-
-## ✅ 필수 구현
-
-1. [https://clinicaltrialskorea.com/](https://clinicaltrialskorea.com/) 에 접속해 검색 영역을 클론 코딩
-2. 공공 데이터 API를 활용해서 질환명 검색시 추천하는 부분 UI 구현
-3. API 호출 최적화
-4. 키보드만으로 추천 검색어들로 이동 가능
-
-## 💪 도전 과제
-
-1. 배포
-2. 퍼지 문자열 검색 지원
-3. 사용자가 입력한 질환명과 일치하는 부분만 볼드처리
-
-# 👤 팀원, 기간
-
-- 팀원 : 박솔찬 신가은 이다슬 정선미 홍선영
-- 기간 : 2022 / 05 / 19 ~ 2022 / 05 / 22
-
-# ⚒️ 사용 기술, 라이브러리
-
-- react , typescript, scss
-- react-query
-- recoil (전역 상태 관리)
-- react-loading
-
-# 💡실행 방법
+# 🏷 실행 방법
 
 1. repository clone
     
@@ -62,13 +35,48 @@
     ```
     
 
-# 구현 기능
+#  🏷 요구 사항
+
+## 1. 필수 구현
+
+☑️  [https://clinicaltrialskorea.com/](https://clinicaltrialskorea.com/) 에 접속해 검색 영역을 클론 코딩<br>
+☑️ 공공 데이터 API를 활용해서 질환명 검색시 추천하는 부분 UI 구현<br>
+☑️ API 호출 최적화<br>
+☑️ 키보드만으로 추천 검색어들로 이동 가능
+
+## 2. 도전 과제
+
+☑️ 배포<br>
+☑️ 퍼지 문자열 검색 지원<br>
+☑️ 사용자가 입력한 질환명과 일치하는 부분만 볼드처리
+
+# 🏷 팀원, 기간
+
+- 팀원 : 박솔찬 신가은 이다슬 정선미 홍선영
+- 기간 : 2022 / 05 / 19 ~ 2022 / 05 / 22
+
+# 🏷 사용 기술, 라이브러리
+
+- **React + JavaScript + TypeScript + SCSS**
+- [**Axios**](https://www.npmjs.com/package/axios)
+- [**React-query**](https://react-query.tanstack.com/)
+- [**recoil**](https://recoiljs.org/) (전역 상태 관리)
+- [**react-loading**](https://www.npmjs.com/package/react-loading) (loading spinner)
+- [**react-icon**](https://react-icons.github.io/react-icons/) (icon)
+
+# 🏷 구현 기능
 
 ## 1. 검색 영역 클론 코딩, 질환명 검색시 추천 부분 API 호출하여 렌더링
-
+- 공공 API를 이용해 검색창에 텍스트를 입력할때마다 검색어를 추천받아 각 경우에 따라서 렌더링 할 수 있도록 구현했습니다.
 ## 2.  API 호출 최적화
+### 1) **✨ react-query**
 
-### 1. ✨ **중복된 api 요청 취소 기능**
+- 구현한 방법
+    - `useQuery` 를 사용하여 같은 API를 호출했을 때 서버에서 받아 온 데이터를 캐싱하여 특정 시간 동안 받아온 데이터가 있을 때, API호출을 하지 않도록 했습니다.  
+        - enabled를 설정하여 검색값이 true일 때 useQuery를 실행
+        - staleTime이 만료되지 않았다면 데이터가 fresh 상태일 때 fetch하지 않도록 설정
+        - cacheTime 옵션 사용
+### 2) ✨ **중복된 api 요청 취소 기능**
 
 [https://user-images.githubusercontent.com/79626675/169638958-b5627fd2-fcb6-402f-9baf-b4263e8aee82.mov](https://user-images.githubusercontent.com/79626675/169638958-b5627fd2-fcb6-402f-9baf-b4263e8aee82.mov)
 
@@ -81,7 +89,7 @@
     - 느린 api 속도를 보완하기 위해 pending 상태일 때 새로운 요청이 온다면 이 전 요청을 취소하고 새로운 요청을 반환하도록 함.
     
 
-### 2. **✨ 디바운싱**
+### 3) **✨ 디바운싱**
 
 - 구현한 방법
     - 검색입력값(value)과 지연시간(delay)을 파라미터로 받는 커스텀 훅을 생성
@@ -90,13 +98,7 @@
 - 이유
     - 검색어 연타시 매번 API를 호출하게 되면 필요없는 요청이 모두 전송됨
 
-### 3. **✨ react-query**
 
-- 구현한 방법
-    - `useQuery` 를 사용하여 서버에서 받아 온 데이터를 캐싱
-        - enabled를 설정하여 검색값이 true일 때 useQuery를 실행
-        - staleTime이 만료되지 않았다면 데이터가 fresh 상태일 때 fetch하지 않도록 설정
-        - cacheTime 옵션 사용
 
 ## 3. 키보드만으로 추천 검색어들로 이동
 
@@ -126,7 +128,7 @@
 
 ## 4. 퍼지 문자열 지원
 
-### 🔎 **검색결과 정렬**
+### 🔎  **검색결과 정렬**
 
 - 구현한 방법
     
@@ -140,7 +142,7 @@
     - 기본적으로 검색어의 위치가 앞에 있는 단어가 사용자가 원하는 단어일 확률이 높기 때문
     - 검색결과 단어의 검색어 위치가 같고 검색결과 단어의 길이가 같은 경우, 검색결과 단어 자체를 비교하여 정렬 기준을 강화
 
-### 🔎 검색어 하이라이트
+### 🔎 **검색어 하이라이트**
 
 - 구현한 방법
     - 검색어를 기준으로 검색결과 단어의 인덱스를 통해 `substring`하여 검색어 기준 앞의 문자열을 추출
