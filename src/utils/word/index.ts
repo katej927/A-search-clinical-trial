@@ -6,7 +6,10 @@ export const sortWordList = (searchText: string, wordList?: IDiseaseItem[]): IDi
     const aIndex = a.sickNm.indexOf(searchText);
     const bIndex = b.sickNm.indexOf(searchText);
     if (aIndex > bIndex) return 1;
-    if (aIndex === bIndex && a.sickNm.length > b.sickNm.length) return 1;
+    if (aIndex === bIndex) {
+      if (a.sickNm.length > b.sickNm.length) return 1;
+      if (a.sickNm > b.sickNm) return 1;
+    }
     return -1;
   });
 };
