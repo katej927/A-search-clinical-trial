@@ -16,6 +16,7 @@ interface Props {
 
 const SearchRecommendation = ({ searchResult, isLoading }: Props) => {
   const searchWord = useRecoilValue(searchWordState);
+
   return (
     <div className={styles.recommendationWrapper}>
       <span className={styles.title}>추천 검색어</span>

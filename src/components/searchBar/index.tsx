@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { keyDownIndexState, searchWordState } from 'states';
-import { useState, KeyboardEvent, ChangeEvent, FormEvent } from 'react';
+import { useState, KeyboardEvent, ChangeEvent, FormEvent, useEffect } from 'react';
 
 import { BsSearch } from 'react-icons/bs';
 import { useDebounce } from 'hooks';
@@ -17,6 +17,7 @@ const SearchBar = () => {
 
   const [controller, setController] = useState<AbortController>();
   const [dataFetchCount, setDataFetchCount] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSearch = useDebounce(searchWord);
 
@@ -26,7 +27,7 @@ const SearchBar = () => {
     setDataFetchCount((prev) => prev + 1);
   };
 
-  const { isLoading, data: searchResult } = useQuery(
+  const { isLoading: isQueryLoading, data: searchResult } = useQuery(
     ['getDiseaseName', debouncedSearch],
     () => getSearchResult(debouncedSearch, controller),
     {
@@ -43,12 +44,16 @@ const SearchBar = () => {
       setController(new AbortController());
     }
     if (setNameIdxValue || setNameIdxValue === 0) setNameIdx(setNameIdxValue);
+    if (setSearchWordValue) setIsLoading(true);
     setSearchWord(setSearchWordValue);
   };
 
+  useEffect(() => {
+    if (!isQueryLoading) setIsLoading(false);
+  }, [isQueryLoading]);
+
   const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) =>
     handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
-
   const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
   const keyDownName = searchResult && nameIdx > -1 ? searchResult[nameIdx].sickNm : searchWord;
 
