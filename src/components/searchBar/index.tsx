@@ -17,7 +17,6 @@ const SearchBar = () => {
 
   const [controller, setController] = useState<AbortController>();
   const [dataFetchCount, setDataFetchCount] = useState(1);
-  // const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSearch = useDebounce(searchWord);
 
@@ -27,7 +26,7 @@ const SearchBar = () => {
     setDataFetchCount((prev) => prev + 1);
   };
 
-  const { isLoading: isQueryLoading, data: searchResult } = useQuery(
+  const { isLoading, data: searchResult } = useQuery(
     ['getDiseaseName', debouncedSearch],
     () => getSearchResult(debouncedSearch, controller),
     {
@@ -47,8 +46,9 @@ const SearchBar = () => {
     setSearchWord(setSearchWordValue);
   };
 
-  const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) =>
+  const handleSearchWord = ({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
     handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
+  };
   const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
   const keyDownName = searchResult && nameIdx > -1 ? searchResult[nameIdx].sickNm : searchWord;
 
@@ -73,7 +73,7 @@ const SearchBar = () => {
           검색
         </button>
       </form>
-      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isQueryLoading} />}
+      {searchWord && <SearchRecommendation searchResult={searchResult} isLoading={isLoading} />}
     </main>
   );
 };
