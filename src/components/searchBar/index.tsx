@@ -50,12 +50,11 @@ const SearchBar = () => {
     handleSettingBeforeApi(value.trim(), value === '' ? -1 : undefined, true);
 
   const handleKeyDown = (e: KeyboardEvent) => handleKeyArrow(e, searchResult, setNameIdx, handleSettingBeforeApi);
-  const handleKeyDownName = (): string => (searchResult && nameIdx > -1 ? searchResult[nameIdx].sickNm : searchWord);
-  const keyDownName = handleKeyDownName();
+  const keyDownName = searchResult && nameIdx > -1 ? searchResult[nameIdx].sickNm : searchWord;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    window.location.href = `${CLINICALTRIALSKOREA}${nameIdx >= 0 ? searchResult[nameIdx].sickNm : searchWord}`;
+    window.location.href = `${CLINICALTRIALSKOREA}${nameIdx > -1 ? searchResult[nameIdx].sickNm : searchWord}`;
   };
 
   return (
