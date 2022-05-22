@@ -19,17 +19,17 @@
     header {
       display: block;
       margin-bottom: 20px;
-      font-size: 34px;
+      font-size: 20px;
       font-weight: 700;
       line-height: 1.6;
       text-align: center;
       letter-spacing: -0.612px;
     }
   }
+}
 
-  @include responsive.after(MD) {
-    .mainWrapper header {
-      font-size: 34px;
-    }
+@include responsive.after(MD) {
+  .mainWrapper .content header {
+    font-size: 34px;
   }
 }
